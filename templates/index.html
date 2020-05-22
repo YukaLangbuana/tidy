@@ -15,6 +15,8 @@
         crossorigin="anonymous"></script>
 
     <link href="/css/index.css" rel="stylesheet">
+
+    <title>Tidy | Yuka Langbuana</title>
 </head>
 
 <body>
@@ -56,7 +58,7 @@
                 <span>Please Wait...</span>
             </button>
             <div class="alert alert-success text-center" id="upload-button-success" role="alert" style="display: none;">
-                <strong>Success!</strong> Your download should begin shortly..
+                <div id="success-message"></div>
             </div>
         </div>
     </div>
@@ -106,6 +108,10 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
+                    $("#success-message").html(
+                        "<strong>Success!</strong> Download will begin shortly. Or click " +
+                        "<a href='" + ('/download/' + response["file_name"]) + "' target='_blank'>here</a>"
+                    )
                     $("#upload-button-processing").hide();
                     $("#upload-button-success").show();
                     console.log(response["file_name"]);
