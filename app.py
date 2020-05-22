@@ -38,8 +38,8 @@ def _cleanup(file):
     for item in df1['good_description']:
         df2.append(json.loads(item))
     df2 = pd.DataFrame(df2)
-    df3 = pd.merge(df1, df2, left_index=True, right_index=True)
+    # df3 = pd.merge(df1, df2, left_index=True, right_index=True)
     writer = pd.ExcelWriter(converted_filename)
-    df3.to_excel(writer)
+    df2.to_excel(writer)
     writer.save()
     return converted_filename

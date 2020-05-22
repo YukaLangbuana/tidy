@@ -63,37 +63,39 @@
         </div>
     </div>
     <script>
-        $('#customFile').on('change', function () {
-            var fileName = $(this).val().split('\\').pop();;
-            $(this).next('.custom-file-label').html(fileName);
-            $("#upload-button").show();
-        })
-
         function doUpload() {
-            $("#upload-button-ready").hide();
-            $("#upload-button-processing").show();
+            if ($('#customFile')[0].files[0].size > 10 * 1024 * 1024) {
+                alert("Ouch! Your file is too big! 10MB only please..");
+                $('#customFile').val(null);
+            }
+            else {
+                var fileName = $("#customFile").val().split('\\').pop();;
+                $("#customFile").next('.custom-file-label').html(fileName);
+                $("#upload-button").show();
+                $("#upload-button-ready").hide();
+                $("#upload-button-processing").show();
 
-            var formData = new FormData();
-            formData.append('file', $('#customFile')[0].files[0]);
+                var formData = new FormData();
+                formData.append('file', $('#customFile')[0].files[0]);
 
-            $.ajax({
-                url: "/upload",
-                method: "POST",
-                data: formData,
-                mimeType: "multipart/form-data",
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $("#upload-button-ready").show();
-                    $("#upload-button-processing").hide();
-                },
-                error: function (response) {
-                    alert("Something happened! Call Yuka!");
-                    $("#upload-button-ready").show();
-                    $("#upload-button-processing").hide();
-                }
-
-            });
+                $.ajax({
+                    url: "/upload",
+                    method: "POST",
+                    data: formData,
+                    mimeType: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        $("#upload-button-ready").show();
+                        $("#upload-button-processing").hide();
+                    },
+                    error: function (response) {
+                        alert("Something happened! Call Yuka!");
+                        $("#upload-button-ready").show();
+                        $("#upload-button-processing").hide();
+                    }
+                });
+            }
         }
 
         function doProcess() {
