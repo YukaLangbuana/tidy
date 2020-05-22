@@ -1,0 +1,16 @@
+html {
+    height: 100%;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.section {
+    padding-bottom: 2vh;
+    width: 50%;
+}
