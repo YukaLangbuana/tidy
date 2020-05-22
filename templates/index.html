@@ -43,7 +43,7 @@
         </div>
         <div class="section">
             <form class="col-12 file-form" enctype="multipart/form-data">
-                <input type="file" class="custom-file-input" id="customFile">
+                <input type="file" class="custom-file-input" id="customFile" onchange="doUpload()">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </form>
         </div>
@@ -67,7 +67,7 @@
             $("#upload-button").show();
         })
 
-        function doProcess() {
+        function doUpload() {
             $("#upload-button-ready").hide();
             $("#upload-button-processing").show();
 
@@ -75,17 +75,41 @@
             formData.append('file', $('#customFile')[0].files[0]);
 
             $.ajax({
-                url: "/process",
+                url: "/upload",
                 method: "POST",
                 data: formData,
                 mimeType: "multipart/form-data",
                 processData: false,
                 contentType: false,
                 success: function (response) {
+                    $("#upload-button-ready").show();
+                    $("#upload-button-processing").hide();
+                },
+                error: function (response) {
+                    alert("Something happened! Call Yuka!");
+                    $("#upload-button-ready").show();
+                    $("#upload-button-processing").hide();
+                }
+
+            });
+        }
+
+        function doProcess() {
+            $("#upload-button-ready").hide();
+            $("#upload-button-processing").show();
+
+            var unique_url = "/process/" + $('#customFile')[0].files[0].name
+
+            $.ajax({
+                url: unique_url,
+                method: "POST",
+                processData: false,
+                contentType: false,
+                success: function (response) {
                     $("#upload-button-processing").hide();
                     $("#upload-button-success").show();
-                    console.log(JSON.parse(response)["file_name"]);
-                    window.open(('/download/')+JSON.parse(response)["file_name"],'_blank');
+                    console.log(response["file_name"]);
+                    window.open(('/download/' + response["file_name"]), '_blank');
                 },
                 error: function (response) {
                     alert("Something happened! Call Yuka!");
